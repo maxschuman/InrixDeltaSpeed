@@ -1,0 +1,39 @@
+﻿@{
+  Page.Title = "Inrix DeltaSpeed: About";  
+}
+
+<div id="navbar" class="NavigationMenu">
+    <ul>
+        <li>
+            <a href="~/Default" title="Home">Home</a>
+        </li>
+        <li>
+            <a href="~/Queues" title="Queues">Queues</a>
+        </li>
+        <li>
+            <a href="~/Backs" title="Backs-of-Queue">Backs-of-Queue</a>
+        </li>
+        <li>
+            <a class="CurrentPage" title="About">About</a>
+        </li>
+    </ul>
+</div>
+<div class="MainContent">
+    <div class="PanelContainer">
+        <div class="ShowcasePanel">
+            <p id="HomepageText">This page clarifies some terminology and methodology used in this project.</p>
+            <h2>What is a Queue?</h2>
+            <p id="HomepageText">
+                A queue consists of a back-of-queue (a drop in speed between connected XD segments in excess of 15 mph), a front-of-queue (the first segment following a front of queue where the speed reaches 60 mph), and all segments in between. Backs-of-queue for which no definite front can be found (due to reaching the end of a road) are logged as well and are viewable through the Backs-of-Queue tab.
+            </p>
+            <h2>XD vs. Sub XD</h2>
+            <p id="HomepageText">
+                Results returned with XD granularity are computed on an XD segment level basis, while those returned with sub XD granularity are computed using subsegments 200 meters in length. All fields are the same for each granularity, except sub XD results return the largest delta between subsegments where an XD-level back-of-queue is found, whether or not that delta is greater than the 15 mph threshhold for XD-level back-of-queue events. 
+            </p>
+            <h2>Duration and Min Ago</h2>
+            <p id="HomepageText">
+                The Duration field is a measure of how long a given queue has been active, while Min Ago gives the amount of time since a given queue was last detected.  
+            </p>
+        </div>
+    </div>
+</div>

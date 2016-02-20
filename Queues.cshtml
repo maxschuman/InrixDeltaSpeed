@@ -1,6 +1,7 @@
 ﻿@{
+    Response.AppendHeader("Refresh", "60");
     Page.Title = "Inrix DeltaSpeed: Queues";
-    var state = "IN";
+    var state = "FL";
     var precision = "XD";
     var time_back = 15;      
     var queryString = "Select Queue_Tags.QueueID, Queue_Tags.Road, Queue_Tags.[Number on Road in Day], [XD Back Mile Marker], [XD Back Delta], [XD Front Mile Marker], [XD Front Speed], [XD Length], [XD Travel Time], [XD Freeflow Delay], [XD Historical Delay], Duration, DATEDIFF(minute, [Time], GETUTCDATE()) AS MinAgo from Queue_Meta AS s INNER JOIN Queue_Tags ON Queue_Tags.QueueID = s.QueueID where ([Time] < GETUTCDATE() AND [TIME] > DateAdd(mi, -@0, GETUTCDATE()) AND [XD Front Mile Marker] IS NOT NULL AND NOT EXISTS(Select 1 from Queue_Meta where(DATEDIFF(minute, [Time], GETUTCDATE()) >= 0 AND s.QueueID = QueueID AND s.Duration < Duration))) ORDER BY MinAgo ASC;";
@@ -22,24 +23,37 @@
     var db = Database.Open(state + "_Database");
     var results = db.Query(queryString, time_back);
     var grid = new WebGrid(source: results, rowsPerPage: 8);
-    
+
+
+
+
 }
+
 
 <div id="navbar" class="NavigationMenu">
     <ul>
         <li>
-            <a href="~/Default.cshtml" title="Home">Home</a>
+            <a href="~/Default" title="Home">Home</a>
         </li>
         <li>
             <a class="CurrentPage" title="Queues">Queues</a>
         </li>
         <li>
-            <a href="~/Backs.cshtml" title="Backs-of-Queue">Backs-of-Queue</a>
+            <a href="~/Backs" title="Backs-of-Queue">Backs-of-Queue</a>
+        </li>
+        <li>
+            <a href="~/About" title="About">About</a>
         </li>
     </ul>
 </div>
         <form method="get" style="padding: 10px">
             <div>
+                <label for="hist">Type</label>
+                <input type="radio" name="hist" id="histno" value="no"  onchange="enableDateTime(this.checked)" style="padding: 5px;padding-bottom: 10px" checked>Live
+                <input type="radio" name="hist" id="histyes" value="yes" style="padding-right: 50px;padding-bottom: 10px">Historical
+                <label for="datetime">Date/Time (ET)</label>
+                <input type="datetime-local" id="datetime" name="datetime" disabled="disabled">
+                <br>
                 <label for="precision">Granularity:</label>
                 <select name="precision" style="padding: 5px">
                     <option value="XD" selected=@(Request.QueryString["precision"] == "XD")>XD</option>
@@ -47,8 +61,8 @@
                 </select>
                 <label for="state">State:</label>
                 <select name="state" style="padding: 5px">
-                    <option value="IN" selected=@(Request.QueryString["state"] == "IN")>IN</option>
                     <option value="FL" selected=@(Request.QueryString["state"] == "FL")>FL</option>
+                    <option value="OH" selected=@(Request.QueryString["state"] == "OH")>OH</option>
                     <option value="TN" selected=@(Request.QueryString["state"] == "TN")>TN</option>
                 </select>
                 <label for="time back">Get From Last:</label>
@@ -61,6 +75,7 @@
                     <option value=720 selected=@(Request.QueryString["time back"] == "720")>12 hours</option>
                     <option value=1440 selected=@(Request.QueryString["time back"] == "1440")>24 hours</option>
                 </select>
+                
                 <input type="submit" value="Get Queues" style="padding: 5px">
             </div>
         </form>
@@ -72,9 +87,8 @@
                             headerStyle: "head",
                             alternatingRowStyle: "alt",
                             columns: grid.Columns(
-                                grid.Column("QueueID"),
+                                grid.Column("QueueID", "Queue ID"),
                                 grid.Column("Road"),
-                                grid.Column("Number on Road in Day", "Queue Num"),
                                 grid.Column("XD Back Mile Marker", "Back Mile Marker"),
                                 grid.Column("XD Back Delta", "Delta (mph)"),
                                 grid.Column("XD Front Mile Marker", "Front Mile Marker"),
@@ -92,9 +106,8 @@
                             headerStyle: "head",
                             alternatingRowStyle: "alt",
                             columns: grid.Columns(
-                                grid.Column("QueueID"),
+                                grid.Column("QueueID", "Queue ID"),
                                 grid.Column("Road"),
-                                grid.Column("Number on Road in Day", "Queue Num"),
                                 grid.Column("Sub XD Back Mile Marker", "Back Mile Marker"),
                                 grid.Column("Sub XD Back Delta", "Largest Delta (mph)"),
                                 grid.Column("Sub XD Front Mile Marker", "Front Mile Marker"),
@@ -119,3 +132,14 @@
     });
 </script>       
 }*@
+
+<script>
+    function enableDateTime(val) {
+        if (val == true) {
+            document.getElementById("datetime").disabled = true;
+        }
+        if (val == false) {
+            document.getElementById("datetime").disabled = false;
+        }
+    }
+</script>
