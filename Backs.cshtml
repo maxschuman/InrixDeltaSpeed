@@ -1,0 +1,96 @@
+﻿@{
+    Page.Title = "Inrix DeltaSpeed: Backs-Of-Queue";
+    var state = "IN";
+    var precision = "XD";
+    var time_back = 15;      
+    var queryString = "Select Queue_Tags.QueueID, Queue_Tags.Road, Queue_Tags.[Number on Road in Day], [XD Back Mile Marker], [XD Back Delta], Duration, DATEDIFF(minute, [Time], GETUTCDATE()) AS MinAgo from Queue_Meta AS s INNER JOIN Queue_Tags ON Queue_Tags.QueueID = s.QueueID where ([Time] < GETUTCDATE() AND [TIME] > DateAdd(mi, -@0, GETUTCDATE()) AND [XD Front Mile Marker] IS NOT NULL AND NOT EXISTS(Select 1 from Queue_Meta where(DATEDIFF(minute, [Time], GETUTCDATE()) >= 0 AND s.QueueID = QueueID AND s.Duration < Duration))) ORDER BY MinAgo ASC;";
+    if(!Request.QueryString["state"].IsEmpty()){
+        state = Request.QueryString["state"];
+        precision = Request.QueryString["precision"];    
+        time_back = Convert.ToInt32(Request.QueryString["time back"]);
+        
+        if(precision.Equals("XD")){
+            queryString = "Select Queue_Tags.QueueID, Queue_Tags.Road, Queue_Tags.[Number on Road in Day], [XD Back Mile Marker], [XD Back Delta], Duration, DATEDIFF(minute, [Time], GETUTCDATE()) AS MinAgo from Queue_Meta AS s INNER JOIN Queue_Tags ON Queue_Tags.QueueID = s.QueueID where ([Time] < GETUTCDATE() AND [TIME] > DateAdd(mi, -@0, GETUTCDATE()) AND [XD Front Mile Marker] IS NOT NULL AND NOT EXISTS(Select 1 from Queue_Meta where(DATEDIFF(minute, [Time], GETUTCDATE()) >= 0 AND s.QueueID = QueueID AND s.Duration < Duration))) ORDER BY MinAgo ASC;";
+        }
+        else if(precision.Equals("Sub XD")){
+           queryString = "Select Queue_Tags.QueueID, Queue_Tags.Road, Queue_Tags.[Number on Road in Day], [Sub XD Back Mile Marker], [Sub XD Back Delta], Duration, DATEDIFF(minute, [Time], GETUTCDATE()) AS MinAgo from Queue_Meta AS s INNER JOIN Queue_Tags ON Queue_Tags.QueueID = s.QueueID where ([Time] < GETUTCDATE() AND [TIME] > DateAdd(mi, -@0, GETUTCDATE()) AND [XD Front Mile Marker] IS NOT NULL AND NOT EXISTS(Select 1 from Queue_Meta where(DATEDIFF(minute, [Time], GETUTCDATE()) >= 0 AND s.QueueID = QueueID AND s.Duration < Duration))) ORDER BY MinAgo ASC;";
+        }
+
+       
+    }
+
+    var db = Database.Open(state + "_Database");
+    var results = db.Query(queryString, time_back);
+    var grid = new WebGrid(source: results, rowsPerPage: 10);
+    
+}
+
+<div id="navbar" class="NavigationMenu">
+    <ul>
+        <li>
+            <a href="~/Default.cshtml" title="Home">Home</a>
+        </li>
+        <li>
+            <a href="~/Queues.cshtml" title="Queues">Queues</a>
+        </li>
+        <li>
+            <a class="CurrentPage" title="Backs-of-Queue">Backs-of-Queue</a>
+        </li>
+    </ul>
+</div>
+        <form method="get" style="padding: 10px">
+            <div>
+                <label for="precision">Granularity:</label>
+                <select name="precision" style="padding: 5px">
+                    <option value="XD" selected=@(Request.QueryString["precision"] == "XD")>XD</option>
+                    <option value="Sub XD" selected=@(Request.QueryString["precision"] == "Sub XD")>Sub XD</option>
+                </select>
+                <label for="state">State:</label>
+                <select name="state" style="padding: 5px">
+                    <option value="IN" selected=@(Request.QueryString["state"] == "IN")>IN</option>
+                    <option value="FL" selected=@(Request.QueryString["state"] == "FL")>FL</option>
+                    <option value="TN" selected=@(Request.QueryString["state"] == "TN")>TN</option>
+                </select>
+                <label for="time back">Get From Last:</label>
+                <select name="time back" style="padding: 5px">
+                    <option value=15 selected=@(Request.QueryString["time back"] == "15")>15 mins</option>
+                    <option value=30 selected=@(Request.QueryString["time back"] == "30")>30 mins</option>
+                    <option value=60 selected=@(Request.QueryString["time back"] == "60")>1 hour</option>
+                    <option value=120 selected=@(Request.QueryString["time back"] == "120")>2 hours</option>
+                    <option value=240 selected=@(Request.QueryString["time back"] == "240")>4 hours</option>
+                    <option value=720 selected=@(Request.QueryString["time back"] == "720")>12 hours</option>
+                    <option value=1440 selected=@(Request.QueryString["time back"] == "1440")>24 hours</option>
+                </select>
+                <input type="submit" value="Get Queues" style="padding: 5px">
+            </div>
+        </form>
+        
+        @{if(precision.Equals("XD")){
+                        <div>@grid.GetHtml(
+                            tableStyle: "grid",
+                            headerStyle: "head",
+                            alternatingRowStyle: "alt",
+                            columns: grid.Columns(
+                                grid.Column("QueueID"),
+                                grid.Column("Road"),
+                                grid.Column("Number on Road in Day", "Queue Num"),
+                                grid.Column("XD Back Mile Marker", "Back Mile Marker"),
+                                grid.Column("XD Back Delta", "Delta (mph)"),
+                                grid.Column("Duration", "Duration (min)"),
+                                grid.Column("MinAgo", "Minutes Ago")))</div>
+                    }
+                    else if(precision.Equals("Sub XD")){
+                        <div>@grid.GetHtml(
+                            tableStyle: "grid",
+                            headerStyle: "head",
+                            alternatingRowStyle: "alt",
+                            columns: grid.Columns(
+                                grid.Column("QueueID"),
+                                grid.Column("Road"),
+                                grid.Column("Number on Road in Day", "Queue Num"),
+                                grid.Column("Sub XD Back Mile Marker", "Back Mile Marker"),
+                                grid.Column("Sub XD Back Delta", "Largest Delta (mph)"),
+                                grid.Column("Duration", "Duration (min)"),
+                                grid.Column("MinAgo", "Minutes Ago")))</div>
+                    }
+                }

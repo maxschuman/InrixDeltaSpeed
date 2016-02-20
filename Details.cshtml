@@ -1,0 +1,13 @@
+﻿@{
+    Page.Title = "Inrix DeltaSpeed: Details-" + UrlData[0] + "-" + UrlData[1];
+}
+
+@{
+    var queryString1 = "SELECT CONVERT(DateTime, [Time], 8) AS dataTime, [XD Back Delta] FROM Queue_Meta WHERE (QueueID = @0 AND [Time] < Convert(time, GETUTCDATE()) AND [TIME] > Convert(time, DateAdd(mi, -15, GETUTCDATE())))";
+
+    var db = Database.Open(UrlData[0] + "_Database");
+    var results = db.Query(queryString1, UrlData[1]);
+    var chart = new Chart(width: 600, height: 400, theme: ChartTheme.Blue).AddTitle("Back Delta (mph)").AddSeries("Default", xValue: results, xField: "dataTime", yValues: results, yFields: "XD Back Delta", chartType: "line").Write();
+}
+
+

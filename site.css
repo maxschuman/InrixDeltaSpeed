@@ -1,0 +1,184 @@
+body{
+    margin-top:50px;}
+
+.left{float: left;}
+.grid { margin: 4px; border-collapse: collapse; width: fit-content; font-family: Arial }
+.grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
+.head { background-color: #E8E8E8; font-weight: bold; color: #FFF; }
+.alt { background-color: #E8E8E8; color: #000; }
+.clickable{cursor: pointer; background: #ffff99; }
+
+body {
+    border: 0;
+    font-family: Arial,Helvetica,Sans-serif;
+    font-family: Verdana,Geneva,Sans-Serif;
+    font-size: 12px;
+    font-size: 1.2rem;
+    height: auto;
+    margin: 0;
+    min-height: 100%;
+    padding: 0;
+    position: relative;
+    
+    width: 100%;
+    background-color: #fff;
+    color: #51555b;
+}
+
+.MainFrame {
+    height: 100%;
+}
+
+user agent stylesheet body {
+    display: block;
+    margin: 8px;
+}
+
+.FixedWidth .HeaderContent, .FixedWidth .NavigationMenu {
+    margin: 0;
+}
+.HeaderContent, .NavigationMenu {
+    margin: 0 20px;
+}
+.HeaderContent {
+    padding-top: 20px;
+    background-color: White;
+}
+div {
+    display: block;
+}
+
+.HeaderContent .Branding {
+    float: left;
+    margin: -13px 1em 0 -13px;
+}
+
+.HeaderContent .Logo {
+    float: left;
+    border-width: 0px;
+}
+
+.HeaderContent .SiteNameContainer {
+    padding-top: 0;
+    float: left;
+}
+
+.HeaderContent .SiteName {
+    background-color: #FFFFFF;
+    color: #083A81;
+    display: block;
+    font-size: 30px;
+    font-size: 2rem;
+    line-height: 35px;
+    line-height: 2.3rem;
+    font-weight: normal;
+    margin-top: 10px;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.NavigationMenu {
+    clear: both;
+    height: 30px;
+    padding-top: 0;
+}
+.HeaderContent, .NavigationMenu {
+    margin: 0 20px;
+}
+.NavigationMenu {
+    clear: both;
+    height: 40px;
+    padding-top: 15px;
+}
+
+.NavigationMenu ul li {
+    float: left;
+}
+user agent stylesheetli {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.NavigationMenu ul li a.CurrentPage {
+    color: #083A81;
+}
+.NavigationMenu ul li:first-child a {
+    padding-left: 0;
+}
+.NavigationMenu ul li a {
+    color: #67A01B;
+    display: inline-block;
+    font-size: 18px;
+    font-size: 1.8rem;
+    line-height: 30px;
+    line-height: 3rem;
+    padding: 0 20px;
+}
+.HeaderContent .LoginView a, a {
+    color: #67A01B;
+    font-size: 12px;
+    font-size: 1.2rem;
+}
+a {
+    text-decoration: none;
+}
+
+user agent stylesheet li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.NavigationMenu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+user agent stylesheet ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.MainContent {
+    background-color: #F5F5F5;
+    overflow: auto;
+    overflow-x: hidden;
+    position: relative;
+    text-align: left;
+    width: 100%;
+}
+
+.DefaultPage .MainContent .PanelContainer {
+    padding: 35px 0 0;
+}
+
+.DefaultPage .MainContent .PanelContainer .ShowcasePanel {
+    margin: 0 auto;
+    width: 940px;
+}
+.DefaultPage .ShowcasePanel {
+    font-family: Arial,Helvetica,Sans-serif;
+}
+
+#HomepageText {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    padding-left: 20px;
+}
+
+.Footer {
+    color: #535454;
+    font-size: 1rem;
+    margin-top: 30px;
+}
+
+
+
