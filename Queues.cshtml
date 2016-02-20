@@ -1,6 +1,7 @@
 ﻿@{
     Response.AppendHeader("Refresh", "60");
     Page.Title = "Inrix DeltaSpeed: Queues";
+
     var state = "FL";
     var precision = "XD";
     var time_back = 15;      
@@ -24,36 +25,53 @@
     var results = db.Query(queryString, time_back);
     var grid = new WebGrid(source: results, rowsPerPage: 8);
 
-
-
-
+ 
 }
 
 
+<script type="text/javascript">
+    function ShowProgress() {
+        setTimeout(function () {
+            var modal = $('<div />');
+            modal.addClass("modal");
+            $('body').append(modal);
+            var loading = $(".loading");
+            loading.show();
+            var top = Math.max($(window).height() / 2 - loading[0].offsetHeight / 2, 0);
+            var left = Math.max($(window).width() / 2 - loading[0].offsetWidth / 2, 0);
+            loading.css({ top: top, left: left });
+        }, 200);
+    }
+    $('form').live("submit", function () {
+        ShowProgress();
+    });
+    $(document).on("click", ".other_pages", function (ev) {
+        ShowProgress();
+    });
+</script>
+<div class="loading" align="center">
+    Loading. Please wait.<br />
+    <br />
+    <img src="ellipsis.gif" alt="" />
+</div>
 <div id="navbar" class="NavigationMenu">
     <ul>
         <li>
-            <a href="~/Default" title="Home">Home</a>
+            <a class="other_pages" href="~/Default" title="Home">Home</a>
         </li>
         <li>
-            <a class="CurrentPage" title="Queues">Queues</a>
+            <a id="queues_link" class="CurrentPage" title="Queues">Queues</a>
         </li>
         <li>
-            <a href="~/Backs" title="Backs-of-Queue">Backs-of-Queue</a>
+            <a class="other_pages" href="~/Backs" title="Backs-of-Queue">Backs-of-Queue</a>
         </li>
         <li>
-            <a href="~/About" title="About">About</a>
+            <a class="other_pages" href="~/About" title="About">About</a>
         </li>
     </ul>
 </div>
         <form method="get" style="padding: 10px">
             <div>
-                <label for="hist">Type</label>
-                <input type="radio" name="hist" id="histno" value="no"  onchange="enableDateTime(this.checked)" style="padding: 5px;padding-bottom: 10px" checked>Live
-                <input type="radio" name="hist" id="histyes" value="yes" style="padding-right: 50px;padding-bottom: 10px">Historical
-                <label for="datetime">Date/Time (ET)</label>
-                <input type="datetime-local" id="datetime" name="datetime" disabled="disabled">
-                <br>
                 <label for="precision">Granularity:</label>
                 <select name="precision" style="padding: 5px">
                     <option value="XD" selected=@(Request.QueryString["precision"] == "XD")>XD</option>
